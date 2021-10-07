@@ -21,15 +21,29 @@ const App:React.FC=()=>{
   const TopInfo=styled.div<{PCView:boolean}>`
     width:${({PCView})=>PCView ? "95":"50"}%;
     margin:auto;
+    display:flex;
   `;
 
   const TopLeftCol=styled.div`
     width:65%;
   `;
 
+  const TopRightCol=styled.div`
+    width:35%;
+  `;
+
   const TopUnderInfo=styled.div`
     display:flex;
     justify-content:space-around;
+  `;
+
+  const LifeTags=styled.div`
+    &::nth-child(n+5){
+      float:right;
+    }
+    &::nth-child(n+10){
+      float:left;
+    }
   `;
 
   const [charaName,setCharaName]=useState<string>("");
@@ -40,9 +54,9 @@ const App:React.FC=()=>{
 
   const lifeTagArray=Object.keys(lifeTag).map((value,index)=>{
     if(index<10){
-      return <LifeTagView lifetag={value} long="" setLifeTag={setLifeTag} />
+      return <LifeTagView lifeTag={lifeTag[value as keyof lifeTags]} setLifeTag={setLifeTag} />
     }else{
-      return <LifeTagView lifetag={value} long="life_tag_long"  setLifeTag={setLifeTag} />
+      return <LifeTagView lifeTag={lifeTag[value as keyof lifeTags]} setLifeTag={setLifeTag} />
     }
   });
 
@@ -61,8 +75,8 @@ const App:React.FC=()=>{
               category="age"
             />
             <UnderCharaName
-              sex={gender}
-              setSex={setGender}
+              gender={gender}
+              setGender={setGender}
               category="gender"
             />
             <UnderCharaName
@@ -72,13 +86,13 @@ const App:React.FC=()=>{
             />
           </TopUnderInfo>
         </TopLeftCol>
-        <div>
+        <TopRightCol>
           <CharaPicture/>
-        </div>
+        </TopRightCol>
       </TopInfo>
-      <div className="life_tags">
+      <LifeTags>
         {lifeTagArray}
-      </div>
+      </LifeTags>
     </div>
   );
 }
@@ -129,7 +143,7 @@ function LifeTagView(props:any){
 
   return(
     <div>
-      <input className={`life_tag_input ${props.long}`} value={props.lifeTag} onChange={handleChange} />
+      <input value={props.lifeTag} onChange={handleChange} />
     </div>
   );
 }
