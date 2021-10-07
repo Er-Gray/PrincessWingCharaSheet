@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import './App.css';
-import { styled } from '@linaria/react';
+import styled from 'styled-components';
 
 const App:React.FC=()=>{
   interface lifeTags{
@@ -18,8 +18,8 @@ const App:React.FC=()=>{
     "想い出":string;
   }
 
-  const TopInfo=styled.div`
-    width:${(props:any)=>props.PCView ? 95:50}%;
+  const TopInfo=styled.div<{PCView:boolean}>`
+    width:${({PCView})=>PCView ? "95":"50"}%;
     margin:auto;
   `;
 
@@ -48,7 +48,7 @@ const App:React.FC=()=>{
 
   return (
     <div className="App">
-      <TopInfo>
+      <TopInfo PCView={true}>
         <TopLeftCol>
           <CharaName
             charaName={charaName}
