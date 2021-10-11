@@ -1,4 +1,4 @@
-import React, { useState,useEffect } from 'react';
+import React, { useState } from 'react';
 import './App.css';
 import styled from 'styled-components';
 
@@ -49,9 +49,16 @@ const App:React.FC=()=>{
   const [exp,setExp]=useState<string>("0");
   const [lifeTag,setLifeTag]=useState<lifeTags>({"趣味":"","特技":"","熱中しているもの":"","得意科目":"","苦手科目":"","委員会":"","部活":"","アルバイト":"","将来の夢":"","志望動機":"","悩みごと":"","想い出":""});
 
+  const handleLifeTagChange=(event:React.ChangeEvent<HTMLInputElement>,lifeTagName:string):void=>{
+    event.preventDefault();
+    setLifeTag({...lifeTag,[lifeTagName]:event.target.value});
+  }
+
   const lifeTagArray=Object.keys(lifeTag).map((value,index)=>{
-    return <LifeTagView lifeTag={lifeTag[value as keyof lifeTags]} setLifeTag={setLifeTag} lifeTagName={value} lifeTags={lifeTag} index={index} />
+    return <label key={index}><LifeTagView lifeTag={lifeTag[value as keyof lifeTags]} lifeTagName={value} lifeTags={lifeTag} index={index} handleChange={handleLifeTagChange} /></label>
   });
+
+  
 
   return (
     <div className="App">
@@ -90,7 +97,7 @@ const App:React.FC=()=>{
   );
 }
 
-const CharaName=(props:any)=>{
+const CharaName=(props:{charaName:string,setCharaName:React.Dispatch<React.SetStateAction<string>>})=>{
   const handleChange=(event:React.ChangeEvent<HTMLInputElement>)=>{
     props.setCharaName(event.target.value);
   }
@@ -130,19 +137,7 @@ function CharaPicture(props:any){
 }
 
 const LifeTagView=(props:any)=>{
-  const handleChange=(event:React.ChangeEvent<HTMLInputElement>):void=>{
-    props.setLifeTag({...props.lifeTags,[props.lifeTagName]:event.target.value});
-  }
-
-  const fakeApi = () => console.log('Api is called');
-
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      fakeApi();
-    }, 5000);
-
-    return () => clearTimeout(timer);
-  }, [props.lifeTag])
+  
 
   const LifeTagInput=styled.div`
     text-align:${props.index>=5&&props.index<=9?"right":"left"};
@@ -151,7 +146,7 @@ const LifeTagView=(props:any)=>{
 
   return(
     <LifeTagInput>
-      <p>{props.lifeTagName}<input value={props.lifeTag} onChange={handleChange} /></p>
+      <p>{props.lifeTagName}<input value={props.lifeTag} onChange={(event:React.ChangeEvent<HTMLInputElement>)=>props.handleChange(event,props.lifeTagName)} /></p>
     </LifeTagInput>
   );
 }
